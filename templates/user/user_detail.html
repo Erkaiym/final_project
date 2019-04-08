@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}<h1>User Detail Page</h1>{% endblock title %}
+
+{% block content %}
+<h1>{{ object.name }} {{ object.surname }}</h1>
+  <p>{{ object.login }}</p>
+  <p>{{ object.email }}</p>
+  <p>{{ object.tel_number }}</p>
+
+{% endblock %}
