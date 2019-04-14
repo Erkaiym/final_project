@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}<h1>Изменение профиля</h1>{% endblock title %}
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+          <div class="col-12 col-sm-10 col-lg-6 d-block mx-auto">
+              <h1 class="text-center">djkfkidg</h1>
+              <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+              </form>
+          </div>
+
+      </div>
+    </div>
+
+<h1>{{ user.profile.name }} {{ user.profile.surname }}</h1>
+  <p>{{ user.email }}</p>
+  <p>{{ user.profile.tel_number }}</p>
+
+{% endblock %}

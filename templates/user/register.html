@@ -5,7 +5,8 @@
 {% block content %}
   <form class='form text-center' action='{% url 'register-page' %}' method='post'>
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ uform.as_p }}
+    {{ pform.as_p }}
     <button class='btn btn-success my-5' type="submit">Зарегистрироваться</button>
   </form>
 {% endblock %}

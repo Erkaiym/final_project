@@ -3,7 +3,7 @@
 {% block title %}<h3 class='text-center my-5'></h3>{% endblock title %}
 
 {% block content %}
-  <form class='form text-center' action='#' method='post'>
+  <form class='form text-center' action='{% url 'login-page' %}' method='post'>
     {% csrf_token %}
     {{ form.as_p }}
     <button class='btn btn-success my-5' type="submit">Войти</button>

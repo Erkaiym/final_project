@@ -83,7 +83,7 @@ class Profile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
-    birthdate = models.DateField(auto_now=False, auto_now_add=False)
+    birthdate = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     tel_number = models.CharField(max_length=15)
 
 

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.views.generic import FormView
 
@@ -8,10 +8,9 @@ from user.models import Profile
 User = get_user_model()
 
 
-
 class LoginForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder':'Ваш email'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Ваш пароль'}))
+    email = forms.EmailField(label='', widget=forms.TextInput(attrs={'placeholder':'Ваш email'}))
+    password = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder':'Ваш пароль'}))
 
 
     def clean_email(self):
@@ -28,16 +27,21 @@ class LoginForm(forms.Form):
         raise forms.ValidationError('Неверный логин или пароль')
 
 
-class UserRegistrationForm(forms.Form):
+class UserRegistrationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    #name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Укажите имя'}))
-    #surname = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Укажите фамилию'}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder':'Укажите эл.адрес'}))
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Придумайте пароль'}))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Подтвердите пароль'}))
-    #sex = forms.ChoiceField(widget=forms.RadioSelect(attrs={'SEX_CHOICES':'value'}))
+    class Meta:
+        model = User
+        fields = ['email']
+        labels = {
+            'email': ''
+        }
+        widgets = {
+            'email': forms.EmailInput(attrs={'placeholder':'Укажите эл.адрес'})
+        }
 
+    password1 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder':'Придумайте пароль'}))
+    password2 = forms.CharField(label='', widget=forms.PasswordInput(attrs={'placeholder':'Подтвердите пароль'}))
 
 
     def clean_email(self):
@@ -55,6 +59,7 @@ class UserRegistrationForm(forms.Form):
             raise forms.ValidationError("Пароли не совпадают")
         return password2
 
+
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super(UserRegistrationForm, self).save(commit=False)
@@ -64,50 +69,25 @@ class UserRegistrationForm(forms.Form):
         return user
 
 
-
-# class AdminRegistrationForm(forms.ModelForm):
-#     """A form for creating new users. Includes all the required
-#     fields, plus a repeated password."""
-#     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-#     password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput)
-#
-#     class Meta:
-#         model = User
-#         fields = ('email',)
-#
-#     def clean_password2(self):
-#         # Check that the two password entries match
-#         password1 = self.cleaned_data.get("password1")
-#         password2 = self.cleaned_data.get("password2")
-#         if password1 and password2 and password1 != password2:
-#             raise forms.ValidationError("Пароли не совпадают")
-#         return password2
-#
-#     def save(self, commit=True):
-#         # Save the provided password in hashed format
-#         user = super(AdminRegistrationForm, self).save(commit=False)
-#         user.set_password(self.cleaned_data["password1"])
-#         if commit:
-#             user.save()
-#         return user
+class ProfileRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['name', 'surname', 'sex', 'birthdate', 'tel_number']
+        labels = {
+            'name':'',
+            'surname':'',
+            'sex':'Пол',
+            'birthdate':'',
+            'tel_number':'',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Укажите имя'}),
+            'surname': forms.TextInput(attrs={'placeholder': 'Укажите фамилию'}),
+            'birthdate': forms.DateInput(format='%y/%m/%d', attrs={'class': 'datepicker',
+                                                                   'placeholder':'Укажите дату рождения (ГГГГ-ММ-ДД'}),
+            'sex': forms.RadioSelect(attrs={'SEX_CHOICES':'value'}),
+            'tel_number': forms.NumberInput(attrs={'placeholder': 'Укажите номер телефона'})
+        }
 
 
-
-
-# class UserAdminChangeForm(forms.ModelForm):
-#     """A form for updating users. Includes all the fields on
-#     the user, but replaces the password field with admin's
-#     password hash display field.
-#     """
-#     password = ReadOnlyPasswordHashField()
-#
-#     class Meta:
-#         model = User
-#         fields = ('email', 'password', 'active', 'admin')
-#
-#     def clean_password(self):
-#         # Regardless of what the user provides, return the initial value.
-#         # This is done here, rather than on the field, because the
-#         # field does not have access to the initial value
-#         return self.initial["password"]
 

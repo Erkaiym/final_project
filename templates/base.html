@@ -39,7 +39,12 @@
         <a class="nav-link disabled" href="#">Link</a>
       </li>
     </ul>
-        <a class="nav-link text-light" href="{% url 'login-page' %}">Войти</a>
+    {% if not request.user.is_authenticated %}
+      <a class="nav-link text-light" href="{% url 'login-page' %}">Войти</a>
+    {% else %}
+      <a class="nav-link text-light" href="{% url 'logout-page' %}">Выйти</a>
+    {% endif %}
+
 
   </div>
 </nav>
