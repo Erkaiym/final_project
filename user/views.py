@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -13,7 +14,6 @@ def home_view(request, *args, **kwargs):
 
 
 class LoginView(FormView):
-    #model = User
     form_class = LoginForm
     template_name = 'user/login.html'
     success_url = '/'
@@ -36,18 +36,6 @@ def logout_view(request):
     logout(request)
     return redirect(reverse('main-page'))
 
-# class RegisterView(FormView):
-#     form_class = UserRegistrationForm
-#     template_name = 'user/register.html'
-#
-#     def form_valid(self, form):
-#         request = self.request
-#         user = User.objects.create_user(email=form.cleaned_data.get('email'),
-#                                         password=form.cleaned_data.get('password'))
-#         profile = Profile.objects.create_user(name=form.cleaned_data.get('name'))
-#         login(request, user, profile)
-#         return redirect(reverse('main-page'))
-
 
 def view_profile(request):
     args = {'user': request.user}
@@ -63,4 +51,6 @@ def register(request):
             profile = pform.save(commit=False)
             profile.user = user
             profile.save()
+            messages.success(request, 'Пользователь создан. Зайдите в свой аккаунт.')
+            return redirect(reverse('login-page'))
     return render(request, 'user/register.html', locals())
