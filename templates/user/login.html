@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block title %}<h3 class='text-center my-5'></h3>{% endblock title %}
 
 {% block content %}
   <form class='form text-center' action='{% url 'login-page' %}' method='post'>
     {% csrf_token %}
-    {{ form.as_p }}
+    <div class="form-group col-lg-6 mx-auto b-block">
+      {{ form.email|as_crispy_field }}
+    </div>
+    <div class="form-group col-lg-6 mx-auto b-block">
+      {{ form.password|as_crispy_field }}
+    </div>
     <button class='btn btn-success my-5' type="submit">Войти</button>
   </form>
   <a class='d-block mx-auto text-center my-5' href='{% url 'register-page' %}'>Зарегистрироваться</a>

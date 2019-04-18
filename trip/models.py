@@ -1,5 +1,7 @@
 from django.db import models
 
+from user.models import Profile
+
 
 class Trip(models.Model):
     start = models.CharField(max_length=250)
@@ -8,6 +10,7 @@ class Trip(models.Model):
     time = models.TimeField(auto_now=False, auto_now_add=False)
     price = models.PositiveIntegerField(default=0)
     empty_seats = models.PositiveIntegerField(default=0)
+    user = models.ForeignKey(Profile, related_name='trips', on_delete=models.CASCADE)
 
     def str(self):
         return self.start + '->' + self.end

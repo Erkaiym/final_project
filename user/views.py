@@ -6,6 +6,7 @@ from django.urls import reverse
 from django import forms
 from django.views.generic import CreateView, DetailView, FormView, UpdateView
 
+
 from user.forms import UserRegistrationForm, LoginForm, ProfileRegistrationForm
 from .models import User, Profile
 
@@ -18,17 +19,18 @@ class LoginView(FormView):
     template_name = 'user/login.html'
     success_url = '/'
 
-
-    def login_form_valid(self, form):
+    def form_valid(self, form):
         request = self.request
         if request.user.is_authenticated:
             return redirect(reverse('main-page'))
-        email = form.cleaned_data.get('email')
-        password = form.cleaned_data.get('password')
-        user = authenticate(request, email=email, password=password)
-        if user:
-            login(request, user)
-        return super().form_invalid(form)
+        if request.method == 'POST':
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, email=email, password=password)
+            if user:
+                login(request, user)
+                return redirect(reverse('user-detail'))
+            return super().form_invalid(form)
 
 
 
@@ -38,19 +40,24 @@ def logout_view(request):
 
 
 def view_profile(request):
-    args = {'user': request.user}
-    return render(request, 'user/user_detail.html', args)
+    return render(request, 'user/user_detail.html', {'user': request.user})
 
 
 def register(request):
-    if request.method == 'POST':
-        uform = UserRegistrationForm(data = request.POST)
-        pform = ProfileRegistrationForm(data = request.POST)
-        if uform.is_valid() and pform.is_valid():
-            user = uform.save()
-            profile = pform.save(commit=False)
-            profile.user = user
-            profile.save()
-            messages.success(request, 'Пользователь создан. Зайдите в свой аккаунт.')
-            return redirect(reverse('login-page'))
+    uform = UserRegistrationForm(data = request.POST)
+    if uform.is_valid():
+        uform.save()
+        return redirect(reverse('login-page'))
     return render(request, 'user/register.html', locals())
+
+
+def register_profile(request):
+    pform = ProfileRegistrationForm(data=request.POST)
+    if  pform.is_valid():
+        profile = pform.save(commit=False)
+        profile.user = request.user
+        profile.save()
+        messages.success(request, 'Информация о пользователе добавлена.')
+        return redirect(reverse('main-page'))
+    return render(request, 'user/register_profile.html', locals())
+

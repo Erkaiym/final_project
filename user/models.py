@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from django.db.models import ForeignKey
 
 
 class UserManager(BaseUserManager):
@@ -85,6 +86,7 @@ class Profile(models.Model):
     surname = models.CharField(max_length=100)
     birthdate = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     tel_number = models.CharField(max_length=15)
+    parent = ForeignKey('self', related_name='children', blank=True, null=True, on_delete=models.CASCADE)
 
 
     MAN = 'M'

@@ -1,3 +1,6 @@
+from crispy_forms.bootstrap import InlineRadios, InlineCheckboxes
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
 from django import forms
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -17,7 +20,7 @@ class LoginForm(forms.Form):
         qs = User.objects.filter(email=self.cleaned_data.get('email'))
         if qs.exists() and qs.count() == 1:
             return self.cleaned_data.get('email')
-        raise forms.ValidationError('Такого пользователя не существует')
+        raise forms.ValidationError('Пользователь с данной почтой не найден.')
 
 
     def clean(self):
@@ -84,10 +87,14 @@ class ProfileRegistrationForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'placeholder': 'Укажите имя'}),
             'surname': forms.TextInput(attrs={'placeholder': 'Укажите фамилию'}),
             'birthdate': forms.DateInput(format='%y/%m/%d', attrs={'class': 'datepicker',
-                                                                   'placeholder':'Укажите дату рождения (ГГГГ-ММ-ДД'}),
+                                                                   'placeholder':'Укажите дату рождения (ГГГГ-ММ-ДД)'}),
             'sex': forms.RadioSelect(attrs={'SEX_CHOICES':'value'}),
             'tel_number': forms.NumberInput(attrs={'placeholder': 'Укажите номер телефона'})
         }
+
+        helper = FormHelper()
+
+        helper.layout = Layout(InlineCheckboxes('sex'))
 
 
 
