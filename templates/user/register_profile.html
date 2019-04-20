@@ -8,17 +8,9 @@
     {% csrf_token %}
     <div class="form-group col-lg-6 mx-auto b-block">
       {{ pform.name|as_crispy_field }}
-    </div>
-    <div class="form-group col-lg-6 mx-auto b-block">
       {{ pform.surname|as_crispy_field }}
-    </div>
-    <div class="form-group col-lg-6 mx-auto b-block">
       {{ pform.birthdate|as_crispy_field }}
-    </div>
-    <div class="form-group col-lg-6 mx-auto b-block">
       {{ pform.sex|as_crispy_field }}
-    </div>
-    <div class="form-group col-lg-6 mx-auto b-block">
       {{ pform.tel_number|as_crispy_field }}
     </div>
     <button class='btn btn-success my-5' type="submit">Зарегистрироваться</button>

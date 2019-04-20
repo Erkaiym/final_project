@@ -92,13 +92,13 @@ class Profile(models.Model):
     MAN = 'M'
     WOMAN = 'W'
     SEX_CHOICES = (
-        (MAN, 'Man'),
-        (WOMAN, 'Woman'),
+        (MAN, 'Мужчина'),
+        (WOMAN, 'Женщина'),
     )
 
     sex = models.CharField(
         max_length=1,
-        choices=SEX_CHOICES,
+        choices=SEX_CHOICES, default=None
     )
 
     def __str__(self):

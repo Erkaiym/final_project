@@ -3,21 +3,22 @@
 {% block title %}<h1 class="container d-block mx-auto center mt-5">Профиль</h1>{% endblock title %}
 
 {% block content %}
-    <div class="container d-block mx-auto center">
-    {% if request.user.is_authenticated %}
-<h5>Добавьте данные о себе:</h5>
-  <p>{{ user.email }}</p>
-  <hr>
-  <p>{{ user.profile.name }}</p>
-  <p>{{ user.profile.surname }}</p>
-  <p>{{ user.profile.tel_number }}</p>
-
-  <form class='form text-center' action='{% url 'register-profile-page' %}' method='post'>
-    {% csrf_token %}
-    {{ pform.as_p }}
-    <button class='btn btn-success my-5' type="submit">Добавить</button>
-  </form>
-    {%  endif %}
+  <div class="container d-block mx-auto center">
+  {% if request.user.is_authenticated %}
+    <h5>Добавьте данные о себе</h5>
+    <p>{{ user.email }}</p>
+    <hr>
+    <p>{{ user.profile.name }}</p>
+    <p>{{ user.profile.surname }}</p>
+    <p>{{ user.profile.tel_number }}</p>
+    <div class="row my-5 d-block mx-auto">
+    {% if not user.profile %}
+      <a class="btn btn-success ml-3 mr-3" href="{% url 'register-profile-page' %}">Добавить</a>
+    {% else %}
+      <a class="btn btn-info ml-3 mr-3" href="{% url 'update-profile' %}">Обновить</a>
+      <a class="btn btn-danger ml-3 mr-3" href="{% url 'user-delete' %}">Удалить</a>
+    {% endif %}
     </div>
-
+  </div>
+    {%  endif %}
 {% endblock %}

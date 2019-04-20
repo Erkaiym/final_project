@@ -1,10 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse
-from django import forms
-from django.views.generic import CreateView, DetailView, FormView, UpdateView
+from django.views.generic import FormView
 
 
 from user.forms import UserRegistrationForm, LoginForm, ProfileRegistrationForm
@@ -33,14 +31,13 @@ class LoginView(FormView):
             return super().form_invalid(form)
 
 
-
 def logout_view(request):
     logout(request)
     return redirect(reverse('main-page'))
 
 
 def view_profile(request):
-    return render(request, 'user/user_detail.html', {'user': request.user})
+    return render(request, 'user/user_detail.html', locals())
 
 
 def register(request):
@@ -57,7 +54,23 @@ def register_profile(request):
         profile = pform.save(commit=False)
         profile.user = request.user
         profile.save()
-        messages.success(request, 'Информация о пользователе добавлена.')
+        messages.success(request, 'Информация о пользователе добавлена')
         return redirect(reverse('main-page'))
     return render(request, 'user/register_profile.html', locals())
 
+
+def update_profile(request):
+    profile = Profile.objects.get(id=request.user.profile.id)
+    pform = ProfileRegistrationForm(request.POST or None, instance=profile)
+    # title = 'Обновить данные'
+    if request.method == 'POST':
+        if pform.is_valid():
+            profile = profile.save()
+            return redirect(profile.get_absolute_url())
+    return render(request, 'user/update_profile.html', locals())
+
+
+def user_delete(request):
+    user = User.objects.get(id=request.user.id)
+    user.delete()
+    return render(request, 'user/user_delete.html', locals())

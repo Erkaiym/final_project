@@ -79,7 +79,7 @@ class ProfileRegistrationForm(forms.ModelForm):
         labels = {
             'name':'',
             'surname':'',
-            'sex':'Пол',
+            'sex':'',
             'birthdate':'',
             'tel_number':'',
         }
@@ -92,9 +92,9 @@ class ProfileRegistrationForm(forms.ModelForm):
             'tel_number': forms.NumberInput(attrs={'placeholder': 'Укажите номер телефона'})
         }
 
-        helper = FormHelper()
+    helper = FormHelper()
 
-        helper.layout = Layout(InlineCheckboxes('sex'))
+    helper.layout = Layout(InlineCheckboxes('sex'))
 
 
 

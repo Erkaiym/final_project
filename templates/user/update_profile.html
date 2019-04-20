@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-sm-10 col-lg-6">
+      {% block title %}<h1 class="mt-5 mb-5 text-center">Изменение профиля</h1>{% endblock title %}
+      {% block content %}
+      <form method="post" action='{% url 'update-profile' %}'>
+          {% csrf_token %}
+          <div class="form-group col-lg-6 d-block mx-auto">
+          {{ pform.name|as_crispy_field }}
+          {{ pform.surname|as_crispy_field }}
+          {{ pform.birthdate|as_crispy_field }}
+          {{ pform.tel_number|as_crispy_field }}
+          </div>
+          <button class='btn btn-success my-5 d-block mx-auto' type="submit">Изменить</button>
+         </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

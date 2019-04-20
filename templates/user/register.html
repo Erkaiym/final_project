@@ -8,11 +8,7 @@
     {% csrf_token %}
     <div class="form-group col-lg-6 mx-auto b-block">
       {{ uform.email|as_crispy_field }}
-    </div>
-    <div class="form-group col-lg-6 mx-auto b-block">
       {{ uform.password1|as_crispy_field }}
-    </div>
-    <div class="form-group col-lg-6 mx-auto b-block">
       {{ uform.password2|as_crispy_field }}
     </div>
     <button class='btn btn-success my-5' type="submit">Зарегистрироваться</button>
