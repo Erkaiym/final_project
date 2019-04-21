@@ -7,6 +7,7 @@ from django.views.generic import FormView
 
 from user.forms import UserRegistrationForm, LoginForm, ProfileRegistrationForm
 from .models import User, Profile
+from trip.models import Trip
 
 def home_view(request, *args, **kwargs):
     return render(request, 'home.html', {})
@@ -37,14 +38,19 @@ def logout_view(request):
 
 
 def view_profile(request):
+    trips = Trip.objects.filter() #id=request.user.profile.user.id)
     return render(request, 'user/user_detail.html', locals())
 
 
 def register(request):
-    uform = UserRegistrationForm(data = request.POST)
+    uform = UserRegistrationForm(data=request.POST)
     if uform.is_valid():
         uform.save()
-        return redirect(reverse('login-page'))
+        user = authenticate(email=uform.cleaned_data.get('email'),
+                            password=uform.cleaned_data.get('password1'))
+        if user:
+            login(request, user)
+        return redirect(reverse('register-profile-page'))
     return render(request, 'user/register.html', locals())
 
 
@@ -61,16 +67,25 @@ def register_profile(request):
 
 def update_profile(request):
     profile = Profile.objects.get(id=request.user.profile.id)
-    pform = ProfileRegistrationForm(request.POST or None, instance=profile)
+    pform = ProfileRegistrationForm(request.POST, instance=profile)
     # title = 'Обновить данные'
-    if request.method == 'POST':
-        if pform.is_valid():
-            profile = profile.save()
-            return redirect(profile.get_absolute_url())
+    #if request.method == 'POST':
+    if pform.is_valid():
+        pform.save()
+        messages.success(request, 'Данные обновлены')
+        return redirect('user-detail')
+    else:
+        messages.warning(request, '4444')
     return render(request, 'user/update_profile.html', locals())
+
+
+def confirm_delete(request):
+    user = User.objects.get(id=request.user.id)
+    return render(request, 'user/user_delete.html', locals())
 
 
 def user_delete(request):
     user = User.objects.get(id=request.user.id)
     user.delete()
-    return render(request, 'user/user_delete.html', locals())
+    messages.info(request, 'Пользователь удален')
+    return redirect('main-page')

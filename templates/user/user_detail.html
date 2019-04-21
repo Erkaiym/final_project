@@ -1,24 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}<h1 class="container d-block mx-auto center mt-5">Профиль</h1>{% endblock title %}
+{% load i18n %}
+{% block title %}<h1 class="container mt-5">Профиль</h1>{% endblock title %}
 
 {% block content %}
-  <div class="container d-block mx-auto center">
+  <div class="container">
   {% if request.user.is_authenticated %}
-    <h5>Добавьте данные о себе</h5>
+    {% if not user.profile %}<h5>Добавьте данные о себе</h5>
+    {% endif %}{% endif %}
     <p>{{ user.email }}</p>
     <hr>
     <p>{{ user.profile.name }}</p>
     <p>{{ user.profile.surname }}</p>
     <p>{{ user.profile.tel_number }}</p>
+    <p>{{ user.profile.birthdate }}</p>
     <div class="row my-5 d-block mx-auto">
     {% if not user.profile %}
       <a class="btn btn-success ml-3 mr-3" href="{% url 'register-profile-page' %}">Добавить</a>
     {% else %}
       <a class="btn btn-info ml-3 mr-3" href="{% url 'update-profile' %}">Обновить</a>
-      <a class="btn btn-danger ml-3 mr-3" href="{% url 'user-delete' %}">Удалить</a>
     {% endif %}
+      <a class="btn btn-danger ml-3 mr-3" href="{% url 'confirm-delete' %}">Удалить</a>
     </div>
+{#    {{ if  }}{%  endif %}#}
+    <hr><br>
+    <h5>Запросы:</h5>
   </div>
-    {%  endif %}
-{% endblock %}
+    <h5 class="mb-3">Мои поездки:</h5>
+    {% for trip in trips %}
+  <div class="card col-12 col-sm-10 col-lg-12 mx-auto b-block mb-4">
+  <div class="card-header">
+    {{ trip.start }} -> {{ trip.end }}
+  </div>
+  <div class="card-body">
+    {% language 'ru-RU' %}<h5 class="card-title">{{ trip.date|date:"j F" }}, {{ trip.time|time:"G:i" }}</h5>{% endlanguage %}
+    <p class="card-text">Цена: {{ trip.price }} сомов</p>
+    <p class="card-text">Свободых мест: {{ trip.empty_seats }}</p>
+    <a href="#" class="btn btn-warning">Обновить</a>
+
+
+  </div>
+
+</div>
+{% endfor %}
+
+{% endblock content %}

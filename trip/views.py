@@ -1,6 +1,7 @@
 from django.contrib import messages
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
-
+from django.views.generic import ListView
 
 from .models import Trip
 from .forms import TripForm
@@ -23,19 +24,39 @@ def trip_detail(request, id):
 
 
 def create_trip(request):
-    form = TripForm(request.POST or None, )
-    #trip = Trip.objects.create(id=request.user.profile.id)
+    form = TripForm(request.POST or None)
     title = 'Create a trip'
     if request.user.is_authenticated:
+        # if not request.user.profile:
         if request.method == 'POST':
+        #     messages.warning(request, 'Заполните свой профайл')
+        #     return redirect('register-profile-page')
+        # else:
             if form.is_valid():
                 trip = form.save(commit=False)
                 trip.user = request.user.profile
                 trip.save()
                 return redirect('trip-list')
     else:
-        messages.warning(request, 'Войтите в свой акаунт')
+        messages.info(request, 'Войдите в свой аккаунт')
         return redirect('login-page')
     return render(request, "trip/create_trip.html", locals())
 
-#def search(request):
+
+class SearchView(ListView):
+    template_name = 'trip/list.html'
+
+    def get_queryset(self):
+        request = self.request
+        qstart = request.GET.get('qstart')
+        qend = request.GET.get('qend')
+        if qstart and qend:
+            res = Trip.objects.filter(Q(start__icontains=qstart) | Q(end__icontains=qend))
+            return res
+        else:
+            return Trip.objects.none()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q-start') and self.request.GET.get('q-end')
+        return context

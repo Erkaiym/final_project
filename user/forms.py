@@ -1,10 +1,7 @@
-from crispy_forms.bootstrap import InlineRadios, InlineCheckboxes
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout
 from django import forms
-from django.contrib.auth import get_user_model, authenticate, login
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.views.generic import FormView
+from django.contrib.auth import get_user_model, authenticate
+
+from datetime import datetime, date
 
 from user.models import Profile
 
@@ -86,15 +83,23 @@ class ProfileRegistrationForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Укажите имя'}),
             'surname': forms.TextInput(attrs={'placeholder': 'Укажите фамилию'}),
-            'birthdate': forms.DateInput(format='%y/%m/%d', attrs={'class': 'datepicker',
-                                                                   'placeholder':'Укажите дату рождения (ГГГГ-ММ-ДД)'}),
+            'birthdate': forms.DateInput(format='%y/%m/%d', attrs={'placeholder':'Укажите дату рождения (ГГГГ-ММ-ДД)'}),
             'sex': forms.RadioSelect(attrs={'SEX_CHOICES':'value'}),
             'tel_number': forms.NumberInput(attrs={'placeholder': 'Укажите номер телефона'})
         }
 
-    helper = FormHelper()
+#'%d %B %Y', 'class': 'datepicker',
 
-    helper.layout = Layout(InlineCheckboxes('sex'))
+    def calculate_age(self, birthdate):
+        birthdate = Profile.objects.values_list('birthdate')
+        # today = date.today()
+        # age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+        age = birthdate.append("123")
+        return age
+
+
+
+
 
 
 

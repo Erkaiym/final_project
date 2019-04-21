@@ -61,7 +61,7 @@
 {% block title %}<h1 class='text-center'></h1>{% endblock title %}
 {% if messages %}
   {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
+    <div class="col-lg-6 col-sm-4 d-block mx-auto alert alert-{{ message.tags }}">
       {{ message }}
     </div>
   {% endfor %}

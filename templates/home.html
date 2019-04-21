@@ -6,6 +6,6 @@
 {% block content %}
   <div class='my-5 text-center'>
   <h1 id='home'>Лучше, чем такси</h1>
-  <h5 class="text-center">Привет{% if request.user.is_authenticated %}, {{ request.user.profile.name|title }}{% else %}{% endif %}!</h5>
+  <h5 class="text-center">Привет{% if request.user.is_authenticated %}{% if user.profile.name %}, {{ request.user.profile.name|title }}{% endif %}{% else %}{% endif %}!</h5>
   </div>
 {% endblock %}

@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}<h3 class='text-center my-5'>Поездки</h3>{% endblock title %}
+{% load i18n %}
+{% block title %}<h3 class='text-center my-3'>Доступные поездки</h3>{% endblock title %}
 
 {% block content %}
-  <div class="container">
+  <div class="container my-3">
     <div class="row">
-
+      <form class="form-inline mx-auto b-block" method="get" action="{% url 'search' %}">
+        <input name="qstart" class="form-control font-weight-bold ml-5" type="search" placeholder="Откуда" {% if request.GET.qstart %}value="{{ request.GET.qstart }}"{% endif %}>
+{#        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
+        <input name="qend" class="form-control font-weight-bold ml-5" type="search" placeholder="Куда" {% if request.GET.qend %}value="{{ request.GET.qend }}"{% endif %}>
+        <button class="btn btn-outline-success font-weight-bold ml-3" type="submit">Искать</button>
+      </form>
     </div>
   </div>
   {% for obj in object_list %}
@@ -15,7 +21,7 @@
     {{ obj.start }} -> {{ obj.end }}
   </div>
   <div class="card-body">
-    <h5 class="card-title">{{ obj.date }}, {{ obj.time }}</h5>
+    {% language 'ru-RU' %}<h5 class="card-title">{{ obj.date|date:"j F" }}, {{ obj.time|time:"G:i" }}</h5>{% endlanguage %}
     <p class="card-text">Цена: {{ obj.price }} сомов</p>
     <p class="card-text">Свободых мест: {{ obj.empty_seats }}</p>
     <a href="#" class="btn btn-info">Отправить запрос</a>
