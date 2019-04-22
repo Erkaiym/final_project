@@ -23,7 +23,7 @@
   <div class="card-body">
     {% language 'ru-RU' %}<h5 class="card-title">{{ obj.date }}, {{ obj.time|time:"G:i" }}</h5>{% endlanguage %}
     <p class="card-text">Цена: {{ obj.price }} сомов</p>
-    <p class="card-text">Свободых мест: {{ obj.empty_seats }}</p>
+    <p class="card-text">Свободных мест: {{ obj.empty_seats }}</p>
     <a href="#" class="btn btn-info">Отправить запрос</a>
     <a href="{{ obj.user }}" class="btn btn-warning">Профиль водителя</a>
   </div>

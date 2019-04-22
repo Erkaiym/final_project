@@ -3,15 +3,15 @@
 {% block title %}<h1 class="container d-block mx-auto center mt-5">Удалить профиль</h1>{% endblock title %}
 
 {% block content %}
-    <div class="container d-block mx-auto center">
+  <div class="container d-block mx-auto center">
     {% if request.user.is_authenticated %}
-  <p>{{ user.email }}</p>
-  <hr>
-  <p>{{ user.profile.name }}{{ user.profile.surname }}, {{ user.profile.birthfdate }}</p>
-  <p>{{ user.profile.tel_number }}</p>
-  <h3 class="mb-5">Вы уверены, что хотите удалить Ваш аккаунт?</h3>
-  <a class="btn btn-info ml-5 mr-5" href="{% url 'user-detail' %}">Назад</a>
-  <a class="btn btn-danger ml-5 mr-5" href="{% url 'user-delete' %}">Удалить</a>
-    </div>
+      <p>{{ user.email }}</p>
+      <hr>
+      <p>{{ user.profile.name }}{{ user.profile.surname }}, {{ user.profile.birthfdate }}</p>
+      <p>{{ user.profile.tel_number }}</p>
+      <h3 class="mb-5">Вы уверены, что хотите удалить Ваш аккаунт?</h3>
+      <a class="btn btn-info ml-5 mr-5" href="{% url 'user-detail' %}">Назад</a>
+      <a class="btn btn-danger ml-5 mr-5" href="{% url 'user-delete' %}">Удалить</a>
+      </div>
     {%  endif %}
 {% endblock %}

@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}<h3 class='text-center my-5'>Поездки</h3>{% endblock title %}
+{% block title %}Детали поездки{% endblock title %}
 
 {% block content %}
-  {% for obj in object_list %}
+Направление {{ object.start }} - > {{ object.end }}
 
-    {{ obj.start }} - > {{ obj.end }}<br/>
+Дата {{ object.date }}
 
-  {% endfor %}
+Время {{ object.time }}
+
+Цена {{ object.price }}
+
+Свободные места {{ object.empty_seats }}
+
+Водитель {{ object.user }}
+
 {% endblock %}

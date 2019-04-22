@@ -38,7 +38,7 @@ def logout_view(request):
 
 @profile_required
 def view_profile(request):
-    trips = Trip.objects.filter(user=request.user.profile)
+    trips = Trip.objects.filter(user=request.user.profile) #here
     return render(request, 'user/user_detail.html', locals())
 
 

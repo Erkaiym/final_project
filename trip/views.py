@@ -29,11 +29,7 @@ def create_trip(request):
     form = TripForm(request.POST or None)
     title = 'Create a trip'
     if request.user.is_authenticated:
-        # if not request.user.profile:
         if request.method == 'POST':
-        #     messages.warning(request, 'Заполните свой профайл')
-        #     return redirect('register-profile-page')
-        # else:
             if form.is_valid():
                 trip = form.save(commit=False)
                 trip.user = request.user.profile
@@ -45,6 +41,27 @@ def create_trip(request):
     return render(request, "trip/create_trip.html", locals())
 
 
+def update_trip(request, id):
+    trip = get_object_or_404(Trip, id=id)
+    form = TripForm(request.POST or None, instance=trip)
+    title = 'Update a product'
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('trip-detail')
+    return render(request, "trip/update_trip.html", locals())
+
+
+def confirm_delete_trip(request, id):
+    trip = get_object_or_404(Trip, id=id)
+    return render(request, "trip/delete_trip.html", locals())
+
+
+def delete_trip(request, id):
+    trip = get_object_or_404(Trip, id=id)
+    trip.delete()
+    messages.info(request, 'Поездка удалена')
+    return redirect("trip-list")
 
 
 class SearchView(ListView):
