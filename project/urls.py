@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import path, include
-
 from user.views import home_view, LoginView, view_profile, register, register_profile, logout_view, update_profile, \
     user_delete, confirm_delete
 from trip.views import trip_list, trip_detail, create_trip, SearchView #update_trip,

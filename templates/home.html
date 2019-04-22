@@ -1,11 +1,161 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-{% block title %}{% endblock title %}
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static "assets/css/main.css" %}" />
+  <noscript><link rel="stylesheet" href="{% static "assets/css/noscript.css" %}" /></noscript>
 
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-{% block content %}
-  <div class='my-5 text-center'>
-  <h1 id='home'>Лучше, чем такси</h1>
-  <h5 class="text-center">Привет{% if request.user.is_authenticated %}{% if user.profile.name %}, {{ request.user.profile.name|title }}{% endif %}{% else %}{% endif %}!</h5>
-  </div>
-{% endblock %}
+  <title>НА КОЛЕСАХ</title>
+
+</head>
+<body class="landing is-preload">
+
+{#  <div class='my-5 text-center'>#}
+{#    <h5 class="text-center">Привет{% if request.user.is_authenticated %}{% if user.profile.name %}, {{ request.user.profile.name|title }}{% endif %}{% else %}{% endif %}!</h5>#}
+{#  </div>#}
+
+<!-- Page Wrapper -->
+<div id="page-wrapper">
+
+  <!-- Header -->
+  <header id="header" class="alt">
+    <h1><a href="{% url "main-page" %}">НА КОЛЕСАХ</a></h1>
+    <nav id="nav">
+      <ul>
+        <li class="special">
+          <a href="#menu" class="menuToggle"><span>МЕНЮ</span></a>
+          <div id="menu">
+            <ul>
+              <li><a href="{% url 'main-page' %}">Главная</a></li>
+              <li><a href="{% url 'trip-list' %}">Найти поездку</a></li>
+              <li><a href="{% url 'create-trip' %}">Предложить поездку</a></li>
+              {% if not request.user.is_authenticated %}
+                <li><a href="{% url 'register-page' %}">Зарегистрироваться</a></li>
+                <li><a href="{% url 'login-page' %}">Войти</a></li>
+              {% else %}
+                <li><a href="{% url 'user-detail' %}">Профиль</a></li>
+                <li><a href="{% url 'logout-page' %}">Выйти</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Banner -->
+  <section id="banner">
+    <div class="inner">
+      <h2>НА КОЛЁСАХ</h2>
+      <p>Лучше, чем такси<br /></p>
+      <ul class="actions special">
+        <li><a href="{% url 'login-page' %}" class="button primary">Войти</a></li>
+      </ul>
+    </div>
+    <a href="#one" class="more scrolly">Подробнее</a>
+  </section>
+
+  <!-- One -->
+  <section id="one" class="wrapper style1 special">
+    <div class="inner">
+      <header class="major">
+        <h2>Сервис поиска попутчиков.</h2> <h2>Мы объединяем людей, которым по пути.</h2>
+        <p>Это сообщество попутчиков, объединяющее автовладельцев, у которых есть свободные места в автомобиле, с потенциальными пассажирами-попутчиками. <br />В основе сообщества "НА КОЛЕСАХ" — простые люди.</p>
+      </header>
+    </div>
+  </section>
+
+  <!-- Two -->
+  <section id="two" class="wrapper alt style2">
+    <section class="spotlight">
+      <div class="image"><img src="{% static "images/pic01.jpg" %}" alt="" /></div><div class="content">
+      <h2>Без хлопот</h2>
+      <p>Добирайтесь до места назначения без пересадок. <br />В поездках с попутчиками не надо беспокоиться об <br />очередях и часах, проведенных в ожидании на автовокзалах.</p>
+    </div>
+    </section>
+    <section class="spotlight">
+      <div class="image"><img src="{% static "images/pic02.jpg" %}" alt="" /></div><div class="content">
+      <h2>Дешевле, чем такси</h2>
+      <p>Если поездка и цена вам подходит, бронируйте место.</p>
+    </div>
+    </section>
+    <section class="spotlight">
+      <div class="image"><img src="{% static "images/pic03.jpg" %}" alt="" /></div><div class="content">
+      <h2>Просто в использовании</h2>
+      <p>Просто укажите города отправления и прибытия,<br> а также время выезда.</p>
+    </div>
+    </section>
+  </section>
+
+  <!-- Three -->
+  <section id="three" class="wrapper style3 special">
+    <div class="inner">
+      <header class="major">
+        <h2>Как работает "НА КОЛЕСАХ"</h2>
+        <p>Aliquam ut ex ut augue consectetur interdum. Donec amet imperdiet eleifend<br />
+          fringilla tincidunt. Nullam dui leo Aenean mi ligula, rhoncus ullamcorper.</p>
+      </header>
+      <ul class="features">
+        <li class="icon fa-paper-plane-o">
+          <h3>Arcu accumsan</h3>
+          <p>Augue consectetur sed interdum imperdiet et ipsum. Mauris lorem tincidunt nullam amet leo Aenean ligula consequat consequat.</p>
+        </li>
+        <li class="icon fa-laptop">
+          <h3>Ac Augue Eget</h3>
+          <p>Augue consectetur sed interdum imperdiet et ipsum. Mauris lorem tincidunt nullam amet leo Aenean ligula consequat consequat.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="wrapper style4">
+    <div class="inner">
+      <header>
+        <h2>Присоединяйтесь к сообществу "НА КОЛЕСАХ"</h2>
+        <p>Взаимовыгодные поездки сократят загруженность дорог</p>
+      </header>
+      <ul class="actions stacked">
+        <li><a href="{% url 'register-page' %}" class="button fit primary">Регистрация</a></li>
+        <li><a href="#" class="button fit">Правила</a></li>
+      </ul>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer id="footer">
+    <ul class="icons">
+      <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+      <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+      <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+      <li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+    </ul>
+    <ul class="copyright">
+      <li>&copy; НА КОЛЕСАХ</li><li>2019</a></li>
+    </ul>
+  </footer>
+
+</div>
+
+<!-- Scripts -->
+<script src="{% static "assets/js/jquery.min.js" %}"></script>
+<script src="{% static "assets/js/jquery.scrollex.min.js" %}"></script>
+<script src="{% static "assets/js/jquery.scrolly.min.js" %}"></script>
+<script src="{% static "assets/js/browser.min.js" %}"></script>
+<script src="{% static "assets/js/breakpoints.min.js" %}"></script>
+<script src="{% static "assets/js/util.js" %}"></script>
+<script src="{% static "assets/js/main.js" %}"></script>
+
+</body>
+</html>

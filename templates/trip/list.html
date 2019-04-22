@@ -21,7 +21,7 @@
     {{ obj.start }} -> {{ obj.end }}
   </div>
   <div class="card-body">
-    {% language 'ru-RU' %}<h5 class="card-title">{{ obj.date|date:"j F" }}, {{ obj.time|time:"G:i" }}</h5>{% endlanguage %}
+    {% language 'ru-RU' %}<h5 class="card-title">{{ obj.date }}, {{ obj.time|time:"G:i" }}</h5>{% endlanguage %}
     <p class="card-text">Цена: {{ obj.price }} сомов</p>
     <p class="card-text">Свободых мест: {{ obj.empty_seats }}</p>
     <a href="#" class="btn btn-info">Отправить запрос</a>

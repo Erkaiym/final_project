@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import FormView
 
-
+from project.decorators import profile_required
 from user.forms import UserRegistrationForm, LoginForm, ProfileRegistrationForm
 from .models import User, Profile
 from trip.models import Trip
@@ -36,32 +36,35 @@ def logout_view(request):
     logout(request)
     return redirect(reverse('main-page'))
 
-
+@profile_required
 def view_profile(request):
-    trips = Trip.objects.filter() #id=request.user.profile.user.id)
+    trips = Trip.objects.filter(user=request.user.profile)
     return render(request, 'user/user_detail.html', locals())
 
 
 def register(request):
-    uform = UserRegistrationForm(data=request.POST)
-    if uform.is_valid():
-        uform.save()
-        user = authenticate(email=uform.cleaned_data.get('email'),
-                            password=uform.cleaned_data.get('password1'))
-        if user:
-            login(request, user)
-        return redirect(reverse('register-profile-page'))
+    uform = UserRegistrationForm(request.POST or None)
+    if request.method == "POST":
+        if uform.is_valid():
+            uform.save()
+            user = authenticate(email=uform.cleaned_data.get('email'),
+                                password=uform.cleaned_data.get('password1'))
+            if user:
+                login(request, user)
+            return redirect(reverse('register-profile-page'))
     return render(request, 'user/register.html', locals())
 
 
 def register_profile(request):
-    pform = ProfileRegistrationForm(data=request.POST)
-    if  pform.is_valid():
-        profile = pform.save(commit=False)
-        profile.user = request.user
-        profile.save()
-        messages.success(request, 'Информация о пользователе добавлена')
-        return redirect(reverse('main-page'))
+    pform = ProfileRegistrationForm(request.POST or None)
+    if request.method == "POST":
+        if  pform.is_valid():
+            profile = pform.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            messages.success(request, 'Информация о пользователе добавлена')
+            return redirect(reverse('main-page'))
+
     return render(request, 'user/register_profile.html', locals())
 
 
@@ -69,13 +72,13 @@ def update_profile(request):
     profile = Profile.objects.get(id=request.user.profile.id)
     pform = ProfileRegistrationForm(request.POST, instance=profile)
     # title = 'Обновить данные'
-    #if request.method == 'POST':
-    if pform.is_valid():
-        pform.save()
-        messages.success(request, 'Данные обновлены')
-        return redirect('user-detail')
-    else:
-        messages.warning(request, '4444')
+    if request.method == 'POST':
+        if pform.is_valid():
+            pform.save()
+            messages.success(request, 'Данные обновлены')
+            return redirect('user-detail')
+        else:
+            messages.warning(request, '4444')
     return render(request, 'user/update_profile.html', locals())
 
 

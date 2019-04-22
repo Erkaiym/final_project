@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
 
+from project.decorators import profile_required
 from .models import Trip
 from .forms import TripForm
 
@@ -23,6 +24,7 @@ def trip_detail(request, id):
     return render(request, "trip/detail.html", context)
 
 
+@profile_required
 def create_trip(request):
     form = TripForm(request.POST or None)
     title = 'Create a trip'
@@ -43,6 +45,8 @@ def create_trip(request):
     return render(request, "trip/create_trip.html", locals())
 
 
+
+
 class SearchView(ListView):
     template_name = 'trip/list.html'
 
@@ -50,11 +54,16 @@ class SearchView(ListView):
         request = self.request
         qstart = request.GET.get('qstart')
         qend = request.GET.get('qend')
-        if qstart and qend:
-            res = Trip.objects.filter(Q(start__icontains=qstart) | Q(end__icontains=qend))
-            return res
-        else:
-            return Trip.objects.none()
+        qs = Trip.objects.all()
+
+        if qstart:
+            qs = qs.filter(start__icontains=qstart)
+
+        if qend:
+            qs = qs.filter(end__icontains=qend)
+
+        return qs
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
