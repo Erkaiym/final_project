@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import FormView
 
@@ -8,6 +8,7 @@ from project.decorators import profile_required
 from user.forms import UserRegistrationForm, LoginForm, ProfileRegistrationForm
 from .models import User, Profile
 from trip.models import Trip
+
 
 def home_view(request, *args, **kwargs):
     return render(request, 'home.html', {})
@@ -82,7 +83,7 @@ def update_profile(request):
     return render(request, 'user/update_profile.html', locals())
 
 
-def confirm_delete(request):
+def confirm_delete_user(request):
     user = User.objects.get(id=request.user.id)
     return render(request, 'user/user_delete.html', locals())
 
@@ -92,3 +93,6 @@ def user_delete(request):
     user.delete()
     messages.info(request, 'Пользователь удален')
     return redirect('main-page')
+
+
+

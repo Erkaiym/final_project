@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     #My apps
     'user',
     'trip',
+    'request'
 ]
 
 AUTH_USER_MODEL = 'user.User'

@@ -15,17 +15,17 @@
       </form>
     </div>
   </div>
-  {% for obj in object_list %}
+  {% for trip in object_list %}
   <div class="card col-12 col-sm-10 col-lg-8 mx-auto b-block mb-4">
   <div class="card-header">
-    {{ obj.start }} -> {{ obj.end }}
+    {{ trip.start }} -> {{ trip.end }}
   </div>
   <div class="card-body">
-    {% language 'ru-RU' %}<h5 class="card-title">{{ obj.date }}, {{ obj.time|time:"G:i" }}</h5>{% endlanguage %}
-    <p class="card-text">Цена: {{ obj.price }} сомов</p>
-    <p class="card-text">Свободных мест: {{ obj.empty_seats }}</p>
+    {% language 'ru-RU' %}<h5 class="card-title">{{ trip.date }}, {{ trip.time|time:"G:i" }}</h5>{% endlanguage %}
+    <p class="card-text">Цена: {{ trip.price }} сомов</p>
+    <p class="card-text">Свободных мест: {{ trip.empty_seats }}</p>
     <a href="#" class="btn btn-info">Отправить запрос</a>
-    <a href="{{ obj.user }}" class="btn btn-warning">Профиль водителя</a>
+    <a href="{{ trip.user.user }}" class="btn btn-warning">Профиль водителя</a>
   </div>
 </div>
 {% endfor %}

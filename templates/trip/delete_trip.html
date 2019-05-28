@@ -6,7 +6,7 @@
 
 {% block content %}
   <div class="container d-block mx-auto">
-    <h3 class="my-5 text-center">Вы уверены, что хотите удалить Ваш аккаунт?</h3>
+    <h3 class="my-5 text-center">Вы уверены, что хотите удалить поездку?</h3>
     <div class="card col-12 col-sm-10 col-lg-12 mx-auto b-block mb-4">
       <div class="card-header">
         {{ trip.start }} -> {{ trip.end }}
@@ -17,7 +17,9 @@
         <p class="card-text">Свободых мест: {{ trip.empty_seats }}</p>
       </div>
     </div>
+{#    <a href="{{ trip.get_absolute_url }}" class="btn btn-warning mr-3">Обновить</a>#}
     <a href="{% url "update-trip" trip.id %}" class="btn btn-warning mr-3">Обновить</a>
+
     <a href="{% url "delete-trip" trip.id %}" class="btn btn-danger mr-3">Удалить</a>
 
   </div>

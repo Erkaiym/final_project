@@ -3,6 +3,7 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 from django.db.models import ForeignKey
+from django.urls import reverse
 
 
 class UserManager(BaseUserManager):
@@ -76,6 +77,10 @@ class User(AbstractBaseUser):
     @property
     def is_admin(self):
         return self.admin
+
+    def get_absolute_url(self):
+        return reverse('user-detail', kwargs={'email': self.email})
+
 
     objects = UserManager()
 

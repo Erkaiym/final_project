@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic import ListView
 
 from project.decorators import profile_required
+from user.models import User
 from .models import Trip
 from .forms import TripForm
 
@@ -44,11 +46,11 @@ def create_trip(request):
 def update_trip(request, id):
     trip = get_object_or_404(Trip, id=id)
     form = TripForm(request.POST or None, instance=trip)
-    title = 'Update a product'
+    title = 'Update a trip'
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return redirect('trip-detail')
+            return redirect(trip.get_absolute_url())
     return render(request, "trip/update_trip.html", locals())
 
 
@@ -86,3 +88,8 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q-start') and self.request.GET.get('q-end')
         return context
+
+
+def trip_owner(request, id):
+    owner = get_object_or_404(User, id=id)
+    return owner# redirect(owner.get_absolute_url())

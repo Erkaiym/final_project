@@ -4,54 +4,56 @@
 {% block title %}<h1 class="container mt-5">Профиль</h1>{% endblock title %}
 
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col-lg-4">
-      {% if request.user.is_authenticated %}
-        {% if not user.profile %}<h5>Добавьте данные о себе</h5>
-        {% endif %}{% endif %}
-      <p>{{ user.email }}</p>
-    </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        {% if request.user.is_authenticated %}
+          {% if not user.profile %}<h5>Добавьте данные о себе</h5>
+          {% endif %}{% endif %}
+        <p>{{ user.email }}</p>
+      </div>
 
 
-    <div class="col">
-      {% if not user.profile %}
-        <a class="btn btn-success ml-3 mr-3" href="{% url 'register-profile-page' %}">Добавить</a>
-      {% else %}
-        <a class="btn btn-info ml-3 mr-3" href="{% url 'update-profile' %}">Обновить</a>
-      {% endif %}
-      <a class="btn btn-danger ml-3 mr-3" href="{% url 'confirm-delete' %}">Удалить</a>
+      <div class="col">
+        {% if not user.profile %}
+          <a class="btn btn-success ml-3 mr-3" href="{% url 'register-profile-page' %}">Добавить</a>
+        {% else %}
+          <a class="btn btn-info ml-3 mr-3" href="{% url 'update-profile' %}">Обновить</a>
+        {% endif %}
+        <a class="btn btn-danger ml-3 mr-3" href="{% url 'confirm-delete' %}">Удалить</a>
+      </div>
     </div>
   </div>
-</div>
 
-<hr>
-<p>{{ user.profile.name }}</p>
-<p>{{ user.profile.surname }}</p>
-<p>{{ user.profile.tel_number }}</p>
-<p>{{ user.profile.birthdate }}</p>
-<hr><br>
+  <hr>
+  <p>{{ user.profile.name }}</p>
+  <p>{{ user.profile.surname }}</p>
+  <p>{{ user.profile.tel_number }}</p>
+  <p>{{ user.profile.birthdate }}</p>
+  <hr><br>
 
-<h2 class="mb-4 text-center">Мои поездки:</h2>
-{#{% if user.profile.user %}#}
+  {% if trips %}<h2 class="mb-4 text-center">Мои поездки:</h2>
 
-  {% for trip in trips %}
-  <div class="card col-12 col-sm-10 col-lg-12 mx-auto b-block mb-4">
-  <div class="card-header">
-    {{ trip.start }} -> {{ trip.end }}
-  </div>
-  <div class="card-body">
-  {% language 'ru-RU' %}<h5 class="card-title">{{ trip.date|date:"j F" }}, {{ trip.time|time:"G:i" }}</h5>{% endlanguage %}
-  <p class="card-text">Цена: {{ trip.price }} сомов</p>
-  <p class="card-text">Свободых мест: {{ trip.empty_seats }}</p>
-  <a href="{% url "update-trip" trip.id %}" class="btn btn-warning mr-3">Обновить</a>
-  <a href="{% url "confirm-delete-trip" trip.id %}" class="btn btn-danger mr-3">Удалить</a>
-{#{% endif %}#}
+    {% for trip in trips %}
+      <div class="card col-12 col-sm-10 col-lg-12 mx-auto b-block mb-4">
+        <div class="card-header">
+          {{ trip.start }} -> {{ trip.end }}
+        </div>
+        <div class="card-body">
+          {% language 'ru-RU' %}<h5 class="card-title">{{ trip.date|date:"j F" }}, {{ trip.time|time:"G:i" }}</h5>{% endlanguage %}
+          <p class="card-text">Цена: {{ trip.price }} сомов</p>
+          <p class="card-text">Свободых мест: {{ trip.empty_seats }}</p>
+          <div class="my-3">
+            <a href="{% url "update-trip" trip.id %}" class="btn btn-warning">Обновить</a>
+            <a href="{% url "confirm-delete-trip" trip.id %}" class="btn btn-danger">Удалить</a>
+            <a href="#" class="btn btn-info">Запросы</a>
+          </div>
 
 
-</div>
 
-</div>
-{% endfor %}
+        </div>
 
+      </div>
+    {% endfor %}
+  {% endif %}
 {% endblock content %}
