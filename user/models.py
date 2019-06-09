@@ -1,3 +1,6 @@
+from datetime import date
+import re
+
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
@@ -108,5 +111,15 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.name + ' ' + self.surname
+
+    @property
+    def calculate_age(self):
+        today = date.today()
+        return today.year - self.birthdate.year - ((today.month, today.day) < (self.birthdate.month, self.birthdate.day))
+
+
+
+
+
 
 

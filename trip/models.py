@@ -16,6 +16,5 @@ class Trip(models.Model):
     def __str__(self):
         return self.start + '->' + self.end
 
-    def get_absolute_url(self):
-        return reverse('trip-detail', kwargs={'id':self.id})
+
 

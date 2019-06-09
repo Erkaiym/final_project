@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
-{% block title %}<h1 class="container mt-5">Профиль</h1>{% endblock title %}
+{% block title %}<h1 class="container mt-5" style="color:#16181b">Профиль</h1>{% endblock title %}
 
 {% block content %}
   <div class="container">
     <div class="row">
       <div class="col-lg-4">
         {% if request.user.is_authenticated %}
-          {% if not user.profile %}<h5>Добавьте данные о себе</h5>
+          {% if not user.profile %}<h5 style="color:#16181b">Добавьте данные о себе</h5>
           {% endif %}{% endif %}
-        <p>{{ user.email }}</p>
+        <p style="color:#16181b">{{ user.email }}</p>
       </div>
 
 
@@ -26,34 +26,48 @@
   </div>
 
   <hr>
-  <p>{{ user.profile.name }}</p>
-  <p>{{ user.profile.surname }}</p>
-  <p>{{ user.profile.tel_number }}</p>
-  <p>{{ user.profile.birthdate }}</p>
+  <p style="color:#16181b"><strong>Имя:</strong> {{ user.profile.name }}</p>
+  <p style="color:#16181b"><strong>Фамилия:</strong> {{ user.profile.surname }}</p>
+  <p style="color:#16181b"><strong>Контакты:</strong> {{ user.profile.tel_number }}</p>
+  <p style="color:#16181b"><strong>Возраст:</strong> {{ user.profile.calculate_age }}</p>
+
   <hr><br>
 
-  {% if trips %}<h2 class="mb-4 text-center">Мои поездки:</h2>
+  {% if trips %}
+    <h2 class="mb-4 text-center" style="color:#16181b">Мои поездки:</h2>
 
     {% for trip in trips %}
       <div class="card col-12 col-sm-10 col-lg-12 mx-auto b-block mb-4">
-        <div class="card-header">
+        <div class="card-header" style="color:#16181b">
           {{ trip.start }} -> {{ trip.end }}
         </div>
         <div class="card-body">
-          {% language 'ru-RU' %}<h5 class="card-title">{{ trip.date|date:"j F" }}, {{ trip.time|time:"G:i" }}</h5>{% endlanguage %}
-          <p class="card-text">Цена: {{ trip.price }} сомов</p>
-          <p class="card-text">Свободых мест: {{ trip.empty_seats }}</p>
+          {% language 'ru-RU' %}<h5 class="card-title" style="color:#16181b">{{ trip.date|date:"j F" }}, {{ trip.time|time:"G:i" }}</h5>{% endlanguage %}
+          <p class="card-text" style="color:#16181b">Цена: {{ trip.price }} сомов</p>
+          <p class="card-text" style="color:#16181b">Свободых мест: {{ trip.empty_seats }}</p>
           <div class="my-3">
             <a href="{% url "update-trip" trip.id %}" class="btn btn-warning">Обновить</a>
             <a href="{% url "confirm-delete-trip" trip.id %}" class="btn btn-danger">Удалить</a>
             <a href="#" class="btn btn-info">Запросы</a>
           </div>
-
-
-
         </div>
 
       </div>
     {% endfor %}
+  {% endif %}
+
+  {% if proposals %}
+    <div class="my-4">
+      <h2 class="text-center" style="color:#16181b">Мои запросы:</h2>
+      {% for proposal in proposals %}
+        <hr>
+        <br>
+        <p style="color:#16181b">{{ proposal.name }}</p>
+        <p style="color:#16181b">{{ proposal.tel_number }}</p>
+        <p style="color:#16181b">{{ proposal.trip }}</p>
+        <hr>
+        <br>
+      {% endfor %}
+    </div>
   {% endif %}
 {% endblock content %}

@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     #My apps
     'user',
     'trip',
-    'request'
+    'proposal',
+    'comment',
 ]
 
 AUTH_USER_MODEL = 'user.User'
@@ -119,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Bishkek'
 
 USE_I18N = True
 

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}<h3 class='text-center my-5' style="color:#16181b">Обновите комментарий</h3>{% endblock title %}
+
+{% block content %}
+   <form class='form text-center' action='{% url 'update-comment' comment.id %}' method='post'>
+    {% csrf_token %}
+    <div class="form-group col-lg-6 mx-auto b-block">
+      <p style="color:#16181b">{{ form.comment|as_crispy_field }}</p>
+    </div>
+
+    <button class='btn btn-success my-5' type="submit">Обновить</button>
+  </form>
+{% endblock %}

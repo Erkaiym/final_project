@@ -1,6 +1,5 @@
 from django import forms
 
-
 from .models import Trip
 
 
@@ -26,3 +25,5 @@ class TripForm(forms.ModelForm):
             'price': '',
             'empty_seats': '',
         }
+
+

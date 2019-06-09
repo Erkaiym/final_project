@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth import get_user_model, authenticate
 
@@ -89,15 +91,12 @@ class ProfileRegistrationForm(forms.ModelForm):
             'tel_number': forms.NumberInput(attrs={'placeholder': 'Укажите номер телефона'})
         }
 
-#'%d %B %Y', 'class': 'datepicker',
 
-    def calculate_age(self, birthdate):
-        birthdate = Profile.objects.values_list('birthdate')
-        # today = date.today()
-        # age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
-        age = birthdate.append("123")
-        return age
-
+    def phone(self):
+        tel_number = Profile.objects.filter(tel_number=self.cleaned_data.get('tel_number')).last()
+        if not re.match('\+?1?\d{9,13}', str(tel_number)):
+            raise forms.ValidationError('Введите номер телефона правильно')
+        return tel_number
 
 
 

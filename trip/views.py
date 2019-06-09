@@ -5,25 +5,33 @@ from django.urls import reverse
 from django.views.generic import ListView
 
 from project.decorators import profile_required
+from proposal.models import Proposal
 from user.models import User
 from .models import Trip
 from .forms import TripForm
 
 
 def trip_list(request):
-    queryset = Trip.objects.all()
-    context = {
-        'object_list': queryset
-    }
+    queryset = Trip.objects.all().order_by('-id')
+    profile = request.user.profile
+    context = {'object_list': queryset,
+               'name': profile.name,
+               'tel_number': profile.tel_number}
+
+    if request.method == 'POST':
+        trip_id = request.POST.get('trip_id')
+        trip = Trip.objects.filter(id=trip_id).last()
+        if trip:
+            Proposal.objects.get_or_create(
+                name=profile.name,
+                tel_number=profile.tel_number,
+                profile=profile,
+                trip=trip,
+            )
+            messages.success(request, 'Запрос успешно отправлен')
+            return redirect('user-detail')
+        messages.error(request, 'Поездка не была найдена.')
     return render(request, "trip/list.html", context)
-
-
-def trip_detail(request, id):
-    instance = get_object_or_404(Trip, id=id)
-    context = {
-        'object': instance
-    }
-    return render(request, "trip/detail.html", context)
 
 
 @profile_required
@@ -50,7 +58,7 @@ def update_trip(request, id):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return redirect(trip.get_absolute_url())
+            # return redirect(trip.get_absolute_url())
     return render(request, "trip/update_trip.html", locals())
 
 

@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import FormView
 
 from project.decorators import profile_required
+from proposal.models import Proposal
 from user.forms import UserRegistrationForm, LoginForm, ProfileRegistrationForm
 from .models import User, Profile
 from trip.models import Trip
@@ -40,6 +41,7 @@ def logout_view(request):
 @profile_required
 def view_profile(request):
     trips = Trip.objects.filter(user=request.user.profile) #here
+    proposals = Proposal.objects.filter(profile=request.user.profile)
     return render(request, 'user/user_detail.html', locals())
 
 
@@ -70,16 +72,16 @@ def register_profile(request):
 
 
 def update_profile(request):
+
     profile = Profile.objects.get(id=request.user.profile.id)
-    pform = ProfileRegistrationForm(request.POST, instance=profile)
-    # title = 'Обновить данные'
+    pform = ProfileRegistrationForm(request.POST or None, instance=profile)
     if request.method == 'POST':
         if pform.is_valid():
             pform.save()
             messages.success(request, 'Данные обновлены')
             return redirect('user-detail')
         else:
-            messages.warning(request, '4444')
+            messages.warning(request, '')
     return render(request, 'user/update_profile.html', locals())
 
 
@@ -93,6 +95,7 @@ def user_delete(request):
     user.delete()
     messages.info(request, 'Пользователь удален')
     return redirect('main-page')
+
 
 
 

@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}<h3 class='text-center my-5'>Регистрация</h3>{% endblock title %}
+{% block title %}<h3 class='text-center my-5' style="color:#16181b">Регистрация</h3>{% endblock title %}
 
 {% block content %}
   <form class='form text-center' action='{% url 'register-profile-page' %}' method='post'>
     {% csrf_token %}
-    <div class="form-group col-lg-6 mx-auto b-block">
+    <div class="form-group col-lg-6 mx-auto b-block" style="color:#16181b">
       {{ pform.name|as_crispy_field }}
       {{ pform.surname|as_crispy_field }}
       {{ pform.birthdate|as_crispy_field }}
-      {{ pform.sex|as_crispy_field }}
+      <p style="color:#16181b">{{ pform.sex|as_crispy_field }}</p>
       {{ pform.tel_number|as_crispy_field }}
     </div>
     <button class='btn btn-success my-5' type="submit">Зарегистрироваться</button>

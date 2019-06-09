@@ -4,7 +4,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-sm-10 col-lg-6">
-      {% block title %}<h1 class="mt-5 mb-5 text-center">Изменение профиля</h1>{% endblock title %}
+      {% block title %}<h1 class="mt-5 mb-5 text-center" style="color:#16181b">Изменение профиля</h1>{% endblock title %}
       {% block content %}
       <form method="post" action='{% url 'update-profile' %}'>
           {% csrf_token %}

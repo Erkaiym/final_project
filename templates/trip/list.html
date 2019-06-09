@@ -2,31 +2,61 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load i18n %}
-{% block title %}<h3 class='text-center my-3'>Доступные поездки</h3>{% endblock title %}
+{% block title %}<h3 class='text-center my-3' style="color:#16181b">Доступные поездки</h3>{% endblock title %}
 
 {% block content %}
   <div class="container my-3">
     <div class="row">
       <form class="form-inline mx-auto b-block" method="get" action="{% url 'search' %}">
         <input name="qstart" class="form-control font-weight-bold ml-5" type="search" placeholder="Откуда" {% if request.GET.qstart %}value="{{ request.GET.qstart }}"{% endif %}>
-{#        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
+        {#        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
         <input name="qend" class="form-control font-weight-bold ml-5" type="search" placeholder="Куда" {% if request.GET.qend %}value="{{ request.GET.qend }}"{% endif %}>
         <button class="btn btn-outline-success font-weight-bold ml-3" type="submit">Искать</button>
       </form>
     </div>
   </div>
   {% for trip in object_list %}
-  <div class="card col-12 col-sm-10 col-lg-8 mx-auto b-block mb-4">
-  <div class="card-header">
-    {{ trip.start }} -> {{ trip.end }}
-  </div>
-  <div class="card-body">
-    {% language 'ru-RU' %}<h5 class="card-title">{{ trip.date }}, {{ trip.time|time:"G:i" }}</h5>{% endlanguage %}
-    <p class="card-text">Цена: {{ trip.price }} сомов</p>
-    <p class="card-text">Свободных мест: {{ trip.empty_seats }}</p>
-    <a href="#" class="btn btn-info">Отправить запрос</a>
-    <a href="{{ trip.user.user }}" class="btn btn-warning">Профиль водителя</a>
-  </div>
-</div>
-{% endfor %}
+    <div class="card col-12 col-sm-10 col-lg-8 mx-auto b-block mb-4">
+      <div class="card-header" style="color:#16181b">
+        {{ trip.start }} -> {{ trip.end }}
+      </div>
+      <div class="card-body">
+        {% language 'ru-RU' %}<h5 class="card-title" style="color:#16181b">{{ trip.date }}, {{ trip.time|time:"G:i" }}</h5>{% endlanguage %}
+        <p class="card-text" style="color:#16181b">Цена: {{ trip.price }} сомов</p>
+        <p class="card-text" style="color:#16181b">Свободных мест: {{ trip.empty_seats }}</p>
+        <button class="btn btn-info" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">Отправить запрос</button>
+        <a href="{{ trip.user.user }}" class="btn btn-warning">Профиль водителя</a>
+      </div>
+    </div>
+
+    {#    Proposal Model#}
+
+    <div class="modal" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" style="color:#16181b">Подтвердите данные пассажира</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p style="color:#16181b">Эти данные будут направлены водителю.</p>
+            <p style="color:#16181b">Имя: <strong>{{ name }}</strong></p>
+            <p style="color:#16181b">Контакты: <strong>{{ tel_number }}</strong></p>
+          </div>
+          <div class="modal-footer">
+            <form action="{% url 'trip-list' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="trip_id" value="{{ trip.id }}">
+              <button class='btn btn-success' type="submit">Отправить запрос</button>
+              <a class="btn btn-info" href="{% url 'update-profile' %}">Обновить данные</a>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Назад</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 {% endblock %}
